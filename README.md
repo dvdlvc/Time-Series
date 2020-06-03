@@ -1,4 +1,4 @@
-# Time-Series
+# The Statistical Analysis of Time Series
 
 
 ## App to reproduce some of the plots available in the slides
