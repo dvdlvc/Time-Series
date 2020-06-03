@@ -1,5 +1,9 @@
 # Time-Series
-This repository contains Rnotebook files. Load them in www.rnotebook.io
+
+
+## App to reproduce some of the plots available in the slides
+
+This repository contains Rnotebook files. They all work in www.rnotebook.io a web-based application. No need to download R on the laptop.
 
 I itemize the links
 
