@@ -11,3 +11,5 @@ I itemize the links
 
 
 2. For the [Martingales](https://rnotebook.io/anon/e9b675c01beffd94/notebooks/Martingale.ipynb#)
+
+3. For the [Wold decomposition theorem[()
