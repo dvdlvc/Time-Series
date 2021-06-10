@@ -14,3 +14,7 @@ I itemize the links
 
 3. For the [Wold decomposition theorem](https://rnotebook.io/anon/e9b675c01beffd94/notebooks/Wold.ipynb)
 
+# Advanced Statistical inference
+
+## Network of lawyers: statistical analysis via ERGMs
+
