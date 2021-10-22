@@ -14,5 +14,9 @@ I itemize the links
 
 3. For the [Wold decomposition theorem](https://rnotebook.io/anon/e9b675c01beffd94/notebooks/Wold.ipynb)
 
+Additional reading on some other topics are available here.
+
+
+
 
 
