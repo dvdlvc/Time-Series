@@ -14,7 +14,11 @@ I itemize the links
 
 3. For the [Wold decomposition theorem](https://rnotebook.io/anon/e9b675c01beffd94/notebooks/Wold.ipynb)
 
-Additional reading on some other topics are available here for [Exogeneity in OLS estimation](https://github.com/dvdlvc/Time-Series/blob/master/Exogeneity.pdf) and for [Causality in Machine Learning](https://github.com/dvdlvc/Time-Series/blob/master/Peter_etal_2009.pdf)
+Additional reading on 
+
+1. [Exogeneity in OLS estimation](https://github.com/dvdlvc/Time-Series/blob/master/Exogeneity.pdf) 
+
+2. [Causality in Machine Learning](https://github.com/dvdlvc/Time-Series/blob/master/Peter_etal_2009.pdf)
 
 
 
