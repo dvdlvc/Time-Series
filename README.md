@@ -14,6 +14,8 @@ I itemize the links
 
 3. For the [Wold decomposition theorem](https://rnotebook.io/anon/e9b675c01beffd94/notebooks/Wold.ipynb)
 
+4. For the [Realized Volatity modeling](https://github.com/dvdlvc/Time-Series/blob/master/HAR_RV_Handbout.Rmd)
+
 Additional reading on 
 
 1. [Exogeneity in OLS estimation](https://github.com/dvdlvc/Time-Series/blob/master/Exogeneity.pdf) 
