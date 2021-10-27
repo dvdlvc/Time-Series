@@ -14,7 +14,7 @@ I itemize the links
 
 3. For the [Wold decomposition theorem](https://rnotebook.io/anon/e9b675c01beffd94/notebooks/Wold.ipynb)
 
-4. For the [Realized Volatility modeling](https://github.com/dvdlvc/Time-Series/blob/master/HAR_RV_Handbout.Rmd)
+4. For the [Realized Volatility modeling](https://github.com/dvdlvc/Time-Series/blob/master/HAR_RV_Handbout.html)
 
 Additional reading on 
 
