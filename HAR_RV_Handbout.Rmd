@@ -1,0 +1,255 @@
+---
+title: "Heterogeneous Autoregressive model of Realized Volatility (HAR-RV)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This handout is related to the papers [Corsi (2009)](https://statmath.wu.ac.at/~hauser/LVs/FinEtricsQF/References/Corsi2009JFinEtrics_LMmodelRealizedVola.pdf) and to [Corsi, Fusari,  \& La Vecchia (2013)](https://www.sciencedirect.com/science/article/pii/S0304405X12001808?via%3Dihub). Both papers are about Realized Volatility modeling.
+
+How to use this handout? First read the Introduction and the modeling parts, which are both related to Corsi's paper. Then, move to the real-data analysis. 
+
+<span style="color:red"> Please, run the code on your R studio and 
+reproduce the results. Moreover, please answer the questions in bold and 
+verify your understanding of the statistical analysis. </span>
+
+
+# Introduction
+
+A common approach to the modeling of finacial time series is to resort on diffusion processes. Indeed, much of the theoretical asset pricing literature is cast in continuous time. Within this tradition,the sample path of the price process is also commonly assumed to be continuous. This approach is convenient because this framework effectively involves a dynamic mean (the drift) and variance (the diffusion) modeling, which typically allows for a tractable analysis of asset pricing and portfolio choice problems. On the other hand, we usually do not observe a record of continuously evolving asset prices, and all but the very simplest specifications tend to imply intractable conditional return distributions for the corresponding discretely observed returns. 
+
+This issue has historically inhibited empirical work on estimation and inference for realistic continuous-time asset price processes, although a burst of research activity in this area over the last 20 years has allowed important headway to be made. 
+
+In this handout, we consider a parametric approach to **return volatility modeling**. Parametric volatility models and their implementation constitute one of the cornerstones of modern empirical asset pricing, and a large econometrics and statistics literature has been devoted to the development and theoretical foundation of differently parameter- ized volatility models. A thorough review of this literature is beyond the scope of this chapter; see, e.g., the existing surveys by Andersen et al. (2006a), Bollerslev et al. (1992).
+
+The availability of high-frequency (intraday, like e.g. every minute or every 5 minutes) trades gave a boost to the literature. Indeed, it is well established that proper use of intraday price observations leads to precise and accurate measurement and forecast of the unobservable asset volatility.  In this handout, we consider a simple and effective model that incorporates the information contained in high-frequency data, as summarised by the Realized Volatility (RV) measure. The RV is an easy-to-compute measure of the asset variability, and it is typically constructed from the intraday price movements. This allows the RV to change rapidly according to the market’s movements. We start by a quick review of the literature.
+
+## Literature review and motivation
+
+Financial data present well-known stylized facts that pose serious challenges to their statistical analysis. The autocorrelations of the square and absolute returns show very strong persistence that last for long time periods (months)---for your reference, see e.g. Lecture 7_8 about ARCH modeling. 
+
+Return distributions at different horizons show fat tails and tail crossover, i.e Long-memory volatility is usually obtained by employing fractional difference operators as in the Fractionally Integrated GARCH models of returns or ARFIMA models of RV.
+
+Fractional integration achieves long memory in a parsimonious way by imposing a set of infinite-dimensional restrictions on the infinite variable lags. Those restrictions are transmitted by the fractional difference operators. However, fractionally integrated models also pose some problems. Fractional integration is a convenient mathematical trick but lacks a clear economic interpretation. Comte and Renault (1998) argue that the fractional difference filter $(1-L)^d$ introduces some artificial mixing between long- and short-term characteristics that makes it difficult to disentangle them. Fractionally integrated models are nontrivial to estimate and not easily extendible to multivariate processes.2 Moreover, the application of the fractional difference operator requires a long build-up period which results in the loss of many observations. Finally, these kinds of models are able to reproduce only the unifractal (or monofractal) type of scaling but not the multiscaling behavior found in the empirical data.
+
+An alternative approach views the long-memory and multiscaling features observed in the data as an apparent behavior generated 
+from a process which is not really long memory or multiscaling. If the aggregation level is not large enough compared to the 
+lowest frequency component of the model, **truly asymptotic short-memory and monoscaling models can, in fact, be mistaken for 
+long-memory** and multiscaling ones. In other words, the usual tests employed on the empirical data can indicate the presence of 
+long memory and multiscaling even when none exists, just because the largest aggregation level we are able to consider is 
+actually not large enough.
+
+For instance, LeBaron (2001) shows that a very simple additive model defined as the sum of only three different AR(1) processes displays a decaying memory pattern that can be mistaken for a hyperbolic one. This means that the set of stochastic processes able to generate the stylized facts found in the data is much larger than commonly thought.
+
+Since it is empirically very difficult to statistically discern between true long-memory processes and simple component models with few time scales and given that the latter are much easier to estimate and interpret, we follow this alternative view by proposing a simple component model for conditional volatility which is able to reproduce the main empirical features observed in the data while remaining parsimonious and easy to estimate. 
+
+Within this context, Corsi (2009) proposes an additive cascade model of different volatility components each of which is generated by the actions of different types of market participants. This additive volatility cascade leads to a simple AR-type model in the realized volatility with the feature of considering volatilities realized over different time horizons. We thus term this model, Heterogeneous Autoregressive model of Realized Volatility (HAR-RV).
+
+## Connections to our course
+
+In our lectures we discussed the ARCH model and we mentioned its ability to describe the behavior of the unobserved volatility. In spite of these nice features, some considerations are in order. First, the ARCH is a short-memory process and it is not able to capture the long-memory type of behaviour of the volatility. Second, the ARCH is such that the volatility at time $t$ is not stochastic. The HAR-RV model that we are going to discuss here below overcomes these two points.
+
+
+
+# Modeling
+
+## Preliminaries
+
+In this section we introduce the notation. Let us start by considering the standard continuous time process solution for the price of a financial asset, which we model via the SDE:
+
+$$
+dp(t) = \mu(t) dt + \sigma^2(t) dW(t)
+$$
+
+where $p(t)$ is the logarithm of instantaneous price of an asset, $\mu(t)$ 
+is a sort of instantaneousmean of the process, $W(t)$ is a standard Brownian motion, and $\sigma(t)$ is a sort of instantaneous standard deviation. 
+
+This type of process is commonly applied in mathematical finance and it is known as diffusion process---see Lecture 12 for an introduction.
+
+For the considered diffusion process, the integrated variance associated with day $t$ is the integral of the instantaneous variance over the one-day interval
+$[t − 1d, t]$, where a full-trading day is represented by the time interval 1d,
+$$
+IV^{(d)}_t = \int^{t}_{t − 1d} \sigma^2(w) dw
+$$
+As shown in a series of seminal papers by Andersen, Bollerslev, Diebold,
+and Labys (2001), Andersen, Bollerslev, Diebold, and Ebens (2001), and Barndorff-
+Nielsen and Shephard (2002a, 2002b), the integrated variance IV(d) can be ap- t
+proximated to an arbitrary precision using the sum of intraday mportantly, Andersen, Bollerslev, Diebold, and Labys (2003) showed that direct time series modeling of realized volatility strongly outperforms, in terms of out- of-sample forecasting, the popular GARCH and stochastic volatility models. The standard definition (for an equally spaced return series) of the realized volatility over a time interval of one day is
+$$
+RV^{(d)}_{t} = \sqrt{\sum_{j=0}^{M-1}r_{t-j\Delta}^2}
+$$
+where $\Delta=1d/M$ and the return $r_{t-j\Delta} =p(t-j\Delta)-p(t-(j+1)\Delta)$ defines continously compounded $\Delta$-frequency returns, that is, intraday returns sampled at time interval $\Delta$ (here, the subscript t indexes the day, while j indexes the time within the day t). 
+
+In what follows we are going to consider **$\Delta$ equal to 5 minutes.** Thus, we are going to use
+the 5min RV as a proxy for the unobservable integrated volatility over the time frame of 5 mins.
+
+
+
+
+## HAR-RV model equation
+
+Let us move ahead with the HAR modeling. Toward this end,
+let us combine the past information available at time $t$  into the vector:
+$$
+\mathbf{RV}{_{t}}:=(RV_{t},RV^{w}_{t},RV^{m}_{t}),
+$$
+which is a  column vector in $\mathbb{R}^3$. Then we model the RV dynamics by the following dynamic location model:
+
+\begin{equation}
+E[RV_{t+1}\Vert \mathbf{RV}{_{t}} ]=\beta_0 + \beta_{1}RV_{t} + \beta_{2} RV^{w}_{t} +  \beta_{3} RV^{m}_{t} 
+\label{RVcondmean}
+\end{equation}
+where $\mathbf{\beta}:=(\beta_1,\beta_2,\beta_3)^{\prime}\in \mathbb{R}^{3}$, and the past realized volatility enters the equation via daily component 
+$$RV_{t},$$
+its weakly component:
+$$
+RV^{w}_{t}:=\sum_{i=1}^{4}RV_{t-i}/4,
+$$ 
+and its  monthly component
+$$
+RV^{m}_{t}:=\sum_{i=5}^{21}RV_{t-i}/17,
+$$ 
+
+This approach yields the model equation:
+$$
+RV_{t+1} = E[RV_{t+1}\Vert \mathbf{RV}{_{t}} ] + \epsilon_t
+$$
+where the mean zero error term has specific features that are described in the paper by Corsi (2009)---see Eq. (7) and (8).
+
+# Real-data analysis
+
+
+Now that we gained some insigths about the presence of a daily, weekly and 
+monthly component of the RV, let us see how to implement the HAR model on 
+some real-data.
+
+For our analysis, we are going to consider the 5 mins RV of the S\&P500 index, from Oct-2015 to Sep-2019. The data are freely available in the R package \texttt{highfrequency}, whose last version has date 2021-06-11. The package Ppovides functionality to manage, clean and match highfrequency
+trades and quotes data, calculate various liquidity measures, estimate and
+forecast volatility, detect price jumps and investigate microstructure noise and intraday periodicity. We refer to the [its CRAN link](https://cran.r-project.org/web/packages/highfrequency/highfrequency.pdf) for additional details.
+
+
+## Load the data and compute some key statistics
+```{r , echo=T}
+# install.packages("highfrequency")
+# install.packages("xts")
+library(highfrequency)
+library(xts)
+myRVSPY <- as.xts(SPYRM$RV5, order.by = SPYRM$DT)
+RVSPY <-myRVSPY[450:1450]
+
+```
+
+```{r RVSPY, echo=FALSE}
+plot(RVSPY[,1], col="red", main="RV for S&P500")
+```
+
+whose ACF is displayed here
+
+```{r ACF, echo=FALSE}
+acf(RVSPY,100, col="red", lwd=2, main= "ACF for RV")
+```
+```{r Periodogram, echo=FALSE}
+library(TSA)
+periodogram(RVSPY,ylab='Periodogram');  abline(h=0)
+y.per<-periodogram(RVSPY,ylab='Periodogram', plot=F)
+plot(y.per$freq[1:180],(y.per$spec[1:180]),col="black",type="l",xlab="Freq",ylab = "Periodogram" , main="Zoom on the first 180 frequencies")
+```
+
+and the log-log peridogram looks like:
+
+```{r log-log Periodogram, echo=FALSE}
+plot(log(y.per$freq[1:180]),log(y.per$spec[1:180]),col="black",type="l",xlab="log Freq",ylab = "Log Periodogram" , main="Zoom on the first 180 frequencies")
+```
+
+<span style="color:red">**Comment on the ACF and log-log peridogram plots**</span>
+
+
+## Identify key frequencies for the specification of the weekly, monthly and daily RV component
+
+The peridogram suggests a periodic behavior of the RV. Let's spot the key frequencies:
+
+```{r getting freq, echo=T}
+head(y.per$spec,10) # spot the 1st freq with high peaks
+y.per$freq[6] # once we find it, we transform it in days
+freq1 <- 1/(2*pi*y.per$freq[6])
+freq1
+```
+which represents the monthly component of the RV. Similarly, we find the other relevant frequencies
+
+```{r getting other freqs, echo=T}
+y.per$freq[24]
+freq2 <- 1/(2*pi*y.per$freq[24])
+freq2
+
+y.per$freq[150] # some power of the spectrum in the area around 0.1
+freq3 <- 1/(2*pi*y.per$freq[150])
+freq3
+```
+```{r , echo=FALSE}
+plot(y.per$freq[1:180],(y.per$spec[1:180]),col="black",type="l",xlab="Freq",ylab = "Periodogram" )
+abline(v=y.per$freq[6], col=1, lwd=2)
+abline(v=y.per$freq[24], col=2, lwd=2)
+abline(v=y.per$freq[150], col=3, lwd=2)
+```
+
+## Implementation of the HAR-RV 
+
+By means of the previous analysis we identified three key frequencies: 1 day, 6 days and 27 days. Those frequencies chararcherize the daily, weekly and monthly component of the RV and are in line with Corsi's specification, which suggests to look at 1, 5 and 22 days. Thus, to implement the HAR model, we rely on Corsi's specification and set up
+
+``` {r HAR estimation, echo=TRUE}
+x <- HARmodel(data = RVSPY , periods = c(1,5,22), RVest = c("rCov"),
+              type = "HAR", h = 1, transform = NULL, inputType = "RM")
+## you may change the frequencies in periods to have different aggregations
+class(x)
+x
+summary(x)
+```
+<span style="color:red">**Comment on the estimation outputs**</span>
+
+``` {r Plot of prediction, echo=FALSE, out.width = '100%'}
+plot(x)
+predict(x)
+```
+
+<span style="color:red">**Comment on the plot**</span>
+
+
+## Would like to have a go?
+
+If you're interested in this model you may, e.g.:
+
+1- estimate the HAR using the relevant frequencies that we identified in our preliminary analysis
+
+2- simulate the HAR model for several different parameter specifications and look at the ACF and at the periodogram that the model can generate---see Corsi (2009) for similar exercises
+
+3- Ad libitum
+
+
+## References
+
+1. Andersen, T. G., and T. Bollerslev. 1997. “Heterogeneous information arrivals and return volatility dynamics: Uncovering the long run in high frequency data.” Journal of Finance 52: 975–1005
+
+2. Andersen, T. G., and T. Bollerslev. 1998. “Answering the skeptics: Yes, standard volatility models do provide accurate forecasts.” International Economic Review 39: 885–905
+
+3. Andersen, T. G., T. Bollerslev, and F. X. Diebold. 2007. “Roughing it up: Including jump components in the measurement, modeling, and forecasting of return volatility.” The Review of Economic and Statistics 89(4), 701–720
+
+4. Andersen, T. G., T. Bollerslev, F. X. Diebold, and H. Ebens. 2001. “The distribution of stock returns volatilities.” Journal of Financial Economics 61: 43–76
+
+5. Andersen, T. G., T. Bollerslev, F. X. Diebold, and P. Labys. 2001. “The distribution of realized exchange rate volatility.” Journal of the American Statistical Association 96: 42–55
+
+6. Andersen, T. G., T. Bollerslev, F. X. Diebold, and P. Labys. 2003. “Modeling and fore- casting realized volatility.” Econometrica 71: 579–625.
+
+
+7.  Corsi F., 2009.  "A Simple Approximate Long-Memory Model of Realized Volatility", Journal of Financial Econometrics, 7: 174–196
+
+8. Comte, F., and E. Renault. 1998. “Long memory in continuous time stochastic volatility models.” Mathematical Finance 8: 291–323
+
+9. LeBaron, B. 2001. “Stochastic volatility as a simple generator of financial power laws and long memory.” Quantitative Finance 1: 621–631
+
+10. Granger, C. 1980. “Long memory relationships and the aggregation of dynamic models.” Journal of Econometrics 14: 227–238.
+
+11. Corsi F., Fusari N. and La Vecchia D., 2013.  "Realizing smiles: option pricing using realised volatility", Journal of Financial Economics, 107, 284-304
+
+
