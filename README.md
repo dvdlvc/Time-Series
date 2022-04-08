@@ -7,14 +7,9 @@ This repository contains Rnotebook links for some lecturs of my [time series](ht
 
 I itemize the links
 
-1. For the [Welcome lecture](https://rnotebook.io/anon/45155a7fdcf1ede1/notebooks/Welcome_TimeSeries.ipynb)
+1. For the [Welcome lecture](https://github.com/dvdlvc/Time-Series/blob/master/Welcome_TimeSeries.ipynb)
 
-
-2. For the [Martingales](https://rnotebook.io/anon/e9b675c01beffd94/notebooks/Martingale.ipynb#)
-
-3. For the [Wold decomposition theorem](https://rnotebook.io/anon/e9b675c01beffd94/notebooks/Wold.ipynb)
-
-4. For the [Realized Volatility modeling](https://github.com/dvdlvc/Time-Series/blob/master/HAR_RV_Handbout.html)
+2. For the [Realized Volatility modeling](https://github.com/dvdlvc/Time-Series/blob/master/HAR_RV_Handbout.html)
 
 Additional reading on 
 
