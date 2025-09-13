@@ -17,9 +17,9 @@ Additional reading on
 
 2. [Causality in Machine Learning](https://github.com/dvdlvc/Time-Series/blob/master/Peter_etal_2009.pdf)
 
-3.[Generative Models for time series]() 
+3. [Generative Models for time series](https://github.com/dvdlvc/Time-Series/blob/master/NeurIPS-2019-time-series-generative-adversarial-networks-Paper.pdf) 
 
-LAST UPDATE: Sept. 2023
+LAST UPDATE: Sept. 2025
 
 
 
