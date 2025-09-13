@@ -17,6 +17,8 @@ Additional reading on
 
 2. [Causality in Machine Learning](https://github.com/dvdlvc/Time-Series/blob/master/Peter_etal_2009.pdf)
 
+3.[Generative Models for time series]() 
+
 LAST UPDATE: Sept. 2023
 
 
