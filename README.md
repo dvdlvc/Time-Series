@@ -1,8 +1,6 @@
 # The Statistical Analysis of Time Series
 
 
-## Reproducing some of the plots available in the slides
-
 This repository contains Rnotebook links for some lecturs of my course The Statistical Analysis of Time Series, at University of Geneva, in the [Master of Science in Statistics](https://www.unige.ch/gsem/en/programs/masters/statistics/). To run the files you may use Jupyter Notebook, a web-based application---no need for downloading R on the laptop: you only need an internet connection and a browser (e.g. [Safari](https://support.apple.com/downloads/safari), [Firefox](https://www.mozilla.org/en-US/firefox/new/)).
 
 I itemize the links
