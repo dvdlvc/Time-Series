@@ -7,7 +7,7 @@ I itemize the links
 
 1. For the [Welcome lecture](https://github.com/dvdlvc/Time-Series/blob/master/Welcome_TimeSeries.ipynb)
 
-2. For the [Realized Volatility modeling](https://github.com/dvdlvc/Time-Series/blob/master/HAR_RV_Handbout.html)
+2. For the [Realized Volatility modeling](https://github.com/dvdlvc/Time-Series/blob/master/HAR_RV_Handbout.html.zip)
 
 Additional reading on 
 
